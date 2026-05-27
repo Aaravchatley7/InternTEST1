@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DocVerify — AI Document Verification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0d14;--surf:#fff;--muted:#6b7280;--border:#e5e7eb;--bg:#f3f4f8;
+  --accent:#4f46e5;--accent-lt:#eef2ff;--accent-dk:#4338ca;
+  --green:#059669;--green-lt:#ecfdf5;
+  --red:#dc2626;--red-lt:#fef2f2;
+  --amber:#d97706;--amber-lt:#fffbeb;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 8px 32px rgba(0,0,0,.08);
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 80% 60% at 15% 5%,rgba(79,70,229,.07) 0%,transparent 55%),
+             radial-gradient(ellipse 60% 50% at 85% 85%,rgba(16,185,129,.05) 0%,transparent 55%)}
+
+/* ── Header ── */
+header{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 40px;
+  background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;
+  font-weight:800;font-size:19px;color:var(--ink);text-decoration:none}
+.logo-icon{width:34px;height:34px;border-radius:9px;background:var(--accent);
+  color:#fff;display:grid;place-items:center;font-size:16px}
+.hdr-badge{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-lt);padding:4px 10px;border-radius:20px}
+
+/* ── Layout ── */
+.page{position:relative;z-index:1;max-width:1120px;margin:0 auto;
+  padding:44px 20px 80px;display:grid;grid-template-columns:1fr 360px;
+  grid-template-rows:auto 1fr;gap:28px;align-items:start}
+.hero{grid-column:1/-1}
+@media(max-width:880px){.page{grid-template-columns:1fr}}
+
+/* ── Hero ── */
+.hero-eye{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.hero-eye::before{content:'';width:22px;height:2px;background:var(--accent);border-radius:2px}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;
+  line-height:1.1;letter-spacing:-.02em;margin-bottom:10px}
+.hero h1 span{color:var(--accent)}
+.hero p{color:var(--muted);font-size:15px;max-width:460px;line-height:1.65}
+
+/* ── Card ── */
+.card{background:var(--surf);border-radius:20px;border:1px solid var(--border);
+  box-shadow:var(--shadow);overflow:hidden}
+.card-hd{padding:22px 26px 18px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px}
+.card-hd-icon{width:38px;height:38px;border-radius:11px;background:var(--accent-lt);
+  color:var(--accent);display:grid;place-items:center;font-size:17px;flex-shrink:0}
+.card-hd h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--ink)}
+.card-hd p{font-size:12px;color:var(--muted);margin-top:2px}
+.card-body{padding:26px}
+
+/* ── Flash ── */
+.flash{padding:13px 16px;border-radius:11px;margin-bottom:18px;font-size:13px;
+  font-weight:500;display:flex;align-items:center;gap:9px;animation:slideIn .3s ease}
+.flash.error{background:var(--red-lt);color:var(--red);border:1px solid #fecaca}
+.flash.info{background:var(--accent-lt);color:var(--accent);border:1px solid #c7d2fe}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Form fields ── */
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.row.one{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],input[type=date]{
+  height:43px;border:1.5px solid var(--border);border-radius:10px;padding:0 13px;
+  font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:#fafafa;
+  transition:border-color .15s,box-shadow .15s,background .15s;outline:none;width:100%}
+input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(79,70,229,.1)}
+
+/* ── Divider ── */
+.divider{display:flex;align-items:center;gap:10px;margin:22px 0 18px}
+.divider span{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── Upload zones ── */
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:22px}
+@media(max-width:560px){.doc-grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}}
+.zone{position:relative;border:2px dashed var(--border);border-radius:13px;
+  padding:18px 10px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa}
+.zone:hover,.zone.filled{border-color:var(--accent);background:var(--accent-lt)}
+.zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.zone-icon{font-size:26px;margin-bottom:7px;display:block}
+.zone-label{font-size:13px;font-weight:600;color:var(--ink);display:block;margin-bottom:3px}
+.zone-hint{font-size:11px;color:var(--muted)}
+.zone-name{font-size:11px;font-weight:600;color:var(--accent);margin-top:5px;display:none}
+.zone.filled .zone-name{display:block}
+.zone.filled .zone-hint{display:none}
+
+/* ── Submit ── */
+.btn-submit{width:100%;height:50px;background:var(--accent);color:#fff;border:none;
+  border-radius:11px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:9px}
+.btn-submit:hover{background:var(--accent-dk);transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(79,70,229,.35)}
+.btn-submit:active{transform:translateY(0)}
+.btn-submit.busy{pointer-events:none;opacity:.75}
+.spin{width:17px;height:17px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;
+  border-radius:50%;animation:rot .7s linear infinite;display:none}
+.btn-submit.busy .spin{display:block}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* ── Sidebar panels ── */
+.sidebar{display:flex;flex-direction:column;gap:18px;position:sticky;top:76px}
+.info-card{background:var(--surf);border-radius:18px;padding:22px;
+  border:1px solid var(--border);box-shadow:var(--shadow)}
+.info-card h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;
+  color:var(--ink);margin-bottom:14px}
+.step{display:flex;gap:12px;margin-bottom:16px}
+.step:last-child{margin-bottom:0}
+.step-n{width:26px;height:26px;border-radius:8px;background:var(--accent-lt);
+  color:var(--accent);font-size:12px;font-weight:700;display:grid;place-items:center;flex-shrink:0}
+.step-c h4{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px}
+.step-c p{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* ── Result card ── */
+.result-status{padding:26px;text-align:center}
+.result-status.pass{background:var(--green)}
+.result-status.fail{background:var(--red)}
+.result-big-icon{font-size:44px;display:block;margin-bottom:8px}
+.result-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;margin-bottom:3px}
+.result-sub{font-size:13px;color:rgba(255,255,255,.8)}
+
+.result-body{padding:18px}
+.rf{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;border-radius:10px;
+  margin-bottom:8px;background:#fafafa;border:1px solid var(--border)}
+.rf:last-child{margin-bottom:0}
+.rf-dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+  font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.rf-dot.ok{background:var(--green-lt);color:var(--green)}
+.rf-dot.no{background:var(--red-lt);color:var(--red)}
+.rf-dot.na{background:#f3f4f6;color:#9ca3af}
+.rf-info{flex:1;min-width:0}
+.rf-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:2px}
+.rf-vals{font-size:12px;color:var(--ink);line-height:1.55}
+.rf-doc{color:var(--muted);font-size:11px}
+.result-foot{padding:14px 18px;background:#f9fafb;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);
+  border-radius:0 0 18px 18px}
+
+/* ── OCR debug ── */
+.ocr-toggle{margin-top:14px;padding:12px 16px;background:var(--accent-lt);border-radius:10px;
+  font-size:12px;color:var(--accent);cursor:pointer;font-weight:600;display:flex;
+  align-items:center;justify-content:space-between}
+.ocr-box{display:none;margin-top:8px;background:#f8f9fb;border:1px solid var(--border);
+  border-radius:10px;padding:14px;font-size:11px;font-family:monospace;white-space:pre-wrap;
+  line-height:1.6;color:#374151;max-height:200px;overflow-y:auto}
+.ocr-box.open{display:block}
+
+/* ── Processing overlay ── */
+.overlay{display:none;position:fixed;inset:0;background:rgba(13,13,20,.6);
+  backdrop-filter:blur(6px);z-index:200;place-items:center}
+.overlay.on{display:grid}
+.overlay-box{background:#fff;border-radius:22px;padding:44px 36px;text-align:center;
+  box-shadow:0 24px 80px rgba(0,0,0,.22);max-width:320px;width:90%;
+  animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.overlay-ring{width:68px;height:68px;border:4px solid var(--accent-lt);
+  border-top-color:var(--accent);border-radius:50%;animation:rot .9s linear infinite;margin:0 auto 22px}
+.overlay-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;
+  color:var(--ink);margin-bottom:8px}
+.ov-step{font-size:13px;color:var(--muted);margin-bottom:5px;transition:all .4s}
+.ov-step.active{color:var(--accent);font-weight:600}
+.ov-step.done{opacity:.4;text-decoration:line-through}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo"><div class="logo-icon">🛡</div>DocVerify</a>
+  <span class="hdr-badge">AI-Powered</span>
+</header>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eye">Identity Verification System</div>
+    <h1>Verify your <span>documents</span><br>in seconds.</h1>
+    <p>Upload your Aadhaar, PAN, or Passport — our AI reads and cross-checks your details instantly, for free.</p>
+  </div>
+
+  <!-- MAIN FORM -->
+  <div>
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-hd-icon">👤</div>
+        <div>
+          <h2>Personal Details</h2>
+          <p>Enter exactly as shown on your documents</p>
+        </div>
+      </div>
+      <div class="card-body">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}{% for cat, msg in messages %}
+            <div class="flash {{ cat }}">
+              {{ '⚠️' if cat == 'error' else 'ℹ️' }} {{ msg }}
+            </div>
+          {% endfor %}{% endif %}
+        {% endwith %}
+
+        <form method="POST" enctype="multipart/form-data" id="vForm">
+
+          <div class="row">
+            <div class="field">
+              <label for="name">Full Name *</label>
+              <input type="text" name="name" id="name" placeholder="As on document" required
+                     value="{{ form_data.name if form_data else '' }}">
+            </div>
+            <div class="field">
+              <label for="dob">Date of Birth</label>
+              <input type="date" name="dob" id="dob"
+                     value="{{ form_data.dob if form_data else '' }}">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="phone">Phone Number *</label>
+              <input type="tel" name="phone" id="phone" placeholder="10-digit mobile" required
+                     value="{{ form_data.phone if form_data else '' }}">
+            </div>
+            <div class="field">
+              <label for="email">Email Address *</label>
+              <input type="email" name="email" id="email" placeholder="For result report" required
+                     value="{{ form_data.email if form_data else '' }}">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="aadhaar">Aadhaar Number</label>
+              <input type="text" name="aadhaar" id="aadhaar" placeholder="XXXX XXXX XXXX"
+                     maxlength="14" inputmode="numeric"
+                     value="{{ form_data.aadhaar_number if form_data else '' }}">
+            </div>
+            <div class="field">
+              <label for="pan">PAN Number</label>
+              <input type="text" name="pan" id="pan" placeholder="ABCDE1234F"
+                     maxlength="10" style="text-transform:uppercase"
+                     value="{{ form_data.pan_number if form_data else '' }}">
+            </div>
+          </div>
+
+          <div class="divider"><span>Upload Documents</span></div>
+
+          <div class="doc-grid">
+            <div class="zone" id="z-aadh">
+              <input type="file" name="aadhaar_file" accept="image/*"
+                     onchange="picked(this,'z-aadh','sn-aadh')">
+              <span class="zone-icon">🪪</span>
+              <span class="zone-label">Aadhaar Card</span>
+              <span class="zone-hint">PNG or JPG</span>
+              <span class="zone-name" id="sn-aadh"></span>
+            </div>
+            <div class="zone" id="z-pan">
+              <input type="file" name="pan_file" accept="image/*"
+                     onchange="picked(this,'z-pan','sn-pan')">
+              <span class="zone-icon">💳</span>
+              <span class="zone-label">PAN Card</span>
+              <span class="zone-hint">PNG or JPG</span>
+              <span class="zone-name" id="sn-pan"></span>
+            </div>
+            <div class="zone" id="z-pp">
+              <input type="file" name="passport_file" accept="image/*"
+                     onchange="picked(this,'z-pp','sn-pp')">
+              <span class="zone-icon">🛂</span>
+              <span class="zone-label">Passport</span>
+              <span class="zone-hint">PNG or JPG</span>
+              <span class="zone-name" id="sn-pp"></span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="sbtn">
+            <div class="spin"></div>
+            <span class="btn-txt">Verify Documents →</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    {% if result %}
+    <!-- RESULT CARD -->
+    <div class="card">
+      <div class="result-status {{ 'pass' if result.match else 'fail' }}">
+        <span class="result-big-icon">{{ '✅' if result.match else '❌' }}</span>
+        <div class="result-title">{{ 'Verified!' if result.match else 'Not Verified' }}</div>
+        <div class="result-sub">
+          {{ 'All submitted fields matched the document.' if result.match
+             else 'One or more fields did not match.' }}
+        </div>
+      </div>
+
+      <div class="result-body">
+        {% set fs = result.fields %}
+        {% set field_meta = [
+            ('name',    'Full Name',        '👤'),
+            ('dob',     'Date of Birth',    '📅'),
+            ('aadhaar', 'Aadhaar No.',      '🪪'),
+            ('pan',     'PAN No.',          '💳'),
+            ('phone',   'Phone',            '📱'),
+        ] %}
+
+        {% for key, lbl, ico in field_meta %}
+          {% if key in fs %}
+            {% set f = fs[key] %}
+            {% set not_provided = f.form_value in ('Not provided', '—', '') %}
+            {% set not_extracted = f.doc_value in ('Not extracted', 'Not in document', 'Not found') %}
+            {% set dot_cls = 'ok' if f.match else ('na' if (not_provided or not_extracted) else 'no') %}
+            {% set dot_sym = '✓' if f.match else ('—' if (not_provided or not_extracted) else '✗') %}
+            <div class="rf">
+              <div class="rf-dot {{ dot_cls }}">{{ dot_sym }}</div>
+              <div class="rf-info">
+                <div class="rf-label">{{ ico }} {{ lbl }}</div>
+                <div class="rf-vals">
+                  <strong>{{ f.form_value }}</strong>
+                  {% if not not_extracted %}
+                  <br><span class="rf-doc">Document: {{ f.doc_value }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {% if result.ocr_texts %}
+        <div class="ocr-toggle" onclick="toggleOcr()">
+          <span>🔍 View raw OCR text</span><span id="ocr-arrow">▼</span>
+        </div>
+        <div class="ocr-box" id="ocr-box">
+          {% for dtype, txt in result.ocr_texts.items() %}
+            {% if txt %}
+=== {{ dtype.upper() }} ===
+{{ txt }}
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="result-foot">
+        {% if result.email_sent %}
+          ✉️ Detailed report sent to your email.
+        {% else %}
+          ⚠️ Email could not be sent — check SMTP settings.
+        {% endif %}
+      </div>
+    </div>
+
+    {% else %}
+    <!-- HOW IT WORKS -->
+    <div class="info-card">
+      <h3>How it works</h3>
+      <div class="step">
+        <div class="step-n">1</div>
+        <div class="step-c">
+          <h4>Enter your details</h4>
+          <p>Fill in name, DOB, and ID numbers exactly as on the document.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">2</div>
+        <div class="step-c">
+          <h4>Upload a clear photo</h4>
+          <p>Aadhaar, PAN, or Passport — PNG or JPG, good lighting.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">3</div>
+        <div class="step-c">
+          <h4>AI reads & verifies</h4>
+          <p>Tesseract OCR extracts text; regex + LLM cross-checks every field.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-n">4</div>
+        <div class="step-c">
+          <h4>Result here + email</h4>
+          <p>Instant verdict shown and a detailed report sent to your inbox.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card" style="background:var(--accent-lt);border-color:#c7d2fe">
+      <h3 style="color:var(--accent)">💡 Tips for best results</h3>
+      <ul style="font-size:12px;color:#4338ca;line-height:1.7;padding-left:16px">
+        <li>Use a <strong>flat, well-lit</strong> photo — avoid shadows</li>
+        <li>Keep the card <strong>straight</strong> in frame</li>
+        <li>Make sure all text is <strong>sharp and in focus</strong></li>
+        <li>Enter Aadhaar/PAN <strong>exactly</strong> as printed</li>
+      </ul>
+    </div>
+    {% endif %}
+
+  </div><!-- /sidebar -->
+</div><!-- /page -->
+
+<!-- Processing overlay -->
+<div class="overlay" id="overlay">
+  <div class="overlay-box">
+    <div class="overlay-ring"></div>
+    <div class="overlay-title">Verifying…</div>
+    <div id="os1" class="ov-step active">🔍 Reading document with OCR…</div>
+    <div id="os2" class="ov-step">🤖 Extracting fields with AI…</div>
+    <div id="os3" class="ov-step">🔗 Comparing data…</div>
+    <div id="os4" class="ov-step">✉️ Sending email report…</div>
+  </div>
+</div>
+
+<script>
+function picked(inp, zoneId, nameId) {
+  const zone = document.getElementById(zoneId);
+  const nm   = document.getElementById(nameId);
+  if (inp.files.length) {
+    zone.classList.add('filled');
+    const n = inp.files[0].name;
+    nm.textContent = '✓ ' + (n.length > 22 ? n.slice(0,20)+'…' : n);
+  } else {
+    zone.classList.remove('filled');
+  }
+}
+
+document.getElementById('vForm').addEventListener('submit', function(e) {
+  const hasFile = ['aadhaar_file','pan_file','passport_file'].some(n => {
+    const f = this.querySelector(`[name="${n}"]`);
+    return f && f.files.length > 0;
+  });
+  if (!hasFile) {
+    e.preventDefault();
+    alert('Please upload at least one document image.');
+    return;
+  }
+  const btn = document.getElementById('sbtn');
+  btn.classList.add('busy');
+  document.getElementById('overlay').classList.add('on');
+  const steps = ['os1','os2','os3','os4'];
+  let i = 0;
+  const t = setInterval(() => {
+    if (i > 0) document.getElementById(steps[i-1]).classList.replace('active','done');
+    if (i < steps.length) { document.getElementById(steps[i]).classList.add('active'); i++; }
+    else clearInterval(t);
+  }, 3200);
+});
+
+// Aadhaar: digits only, auto-space every 4
+document.getElementById('aadhaar').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,12);
+  this.value = v.replace(/(\d{4})(?=\d)/g,'$1 ');
+});
+
+// PAN: uppercase alphanumeric
+document.getElementById('pan').addEventListener('input', function() {
+  this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,10);
+});
+
+// Drag-and-drop support
+document.querySelectorAll('.zone').forEach(z => {
+  z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('filled'); });
+  z.addEventListener('dragleave', () => {
+    if (!z.querySelector('input').files.length) z.classList.remove('filled');
+  });
+  z.addEventListener('drop', e => {
+    e.preventDefault();
+    const inp = z.querySelector('input');
+    inp.files = e.dataTransfer.files;
+    inp.dispatchEvent(new Event('change'));
+  });
+});
+
+function toggleOcr() {
+  const box = document.getElementById('ocr-box');
+  const arrow = document.getElementById('ocr-arrow');
+  box.classList.toggle('open');
+  arrow.textContent = box.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>
