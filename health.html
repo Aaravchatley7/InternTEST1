@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">
+    System Health
+</h1>
+
+<div
+    class="card"
+    id="healthCard"
+>
+
+    Loading...
+
+</div>
+
+<script>
+
+async function loadHealth(){
+
+    try{
+
+        const response =
+            await fetch(
+                "/health"
+            );
+
+        const data =
+            await response.json();
+
+        document
+        .getElementById(
+            "healthCard"
+        )
+        .innerHTML =
+
+        `
+        <h2>
+            System Status
+        </h2>
+
+        <br>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            ${data.status || "Running"}
+
+        </p>
+
+        <br>
+
+        <pre>
+
+${JSON.stringify(
+    data,
+    null,
+    2
+)}
+
+        </pre>
+        `;
+
+    }
+
+    catch(error){
+
+        document
+        .getElementById(
+            "healthCard"
+        )
+        .innerHTML =
+
+        `
+        <h2>
+            Error
+        </h2>
+
+        <p>
+            Unable to load health information.
+        </p>
+        `;
+    }
+}
+
+loadHealth();
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,319 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Segoe UI, sans-serif;
+    background:#f5f7fb;
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+
+    width:260px;
+
+    background:#111827;
+
+    color:white;
+
+    padding:30px 20px;
+}
+
+.logo{
+    margin-bottom:40px;
+}
+
+.logo h2{
+    margin-bottom:5px;
+}
+
+.logo p{
+    color:#9ca3af;
+    font-size:14px;
+}
+
+.sidebar nav{
+    display:flex;
+    flex-direction:column;
+}
+
+.sidebar nav a{
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:14px;
+
+    margin-bottom:10px;
+
+    border-radius:10px;
+
+    transition:.2s;
+}
+
+.sidebar nav a:hover{
+
+    background:#1f2937;
+}
+
+.content{
+
+    flex:1;
+
+    padding:40px;
+}
+
+.page-title{
+
+    font-size:32px;
+
+    margin-bottom:30px;
+}
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:20px;
+}
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:16px;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,.08);
+}
+
+.card h3{
+
+    margin-bottom:10px;
+}
+
+.card p{
+
+    color:#6b7280;
+}
+
+.hero{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:16px;
+
+    margin-bottom:30px;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,.08);
+}
+
+.hero h1{
+
+    margin-bottom:10px;
+}
+
+.hero p{
+
+    color:#6b7280;
+}
+
+.form-card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:16px;
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,.08);
+}
+
+.form-group{
+
+    margin-bottom:15px;
+}
+
+label{
+
+    display:block;
+
+    margin-bottom:6px;
+}
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:8px;
+}
+
+button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+button:hover{
+
+    background:#1d4ed8;
+}
+
+.result-card{
+
+    margin-top:20px;
+
+    background:#ecfdf5;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    border-left:5px solid #10b981;
+}
+
+.metric-card{
+
+    text-align:center;
+}
+
+.metric-value{
+
+    font-size:32px;
+
+    font-weight:bold;
+
+    margin-top:10px;
+}
+body{
+    background:
+    linear-gradient(
+        135deg,
+        #f8fafc,
+        #eef2ff
+    );
+}
+
+.sidebar{
+
+    background:
+    linear-gradient(
+        180deg,
+        #0f172a,
+        #1e293b
+    );
+
+    box-shadow:
+    10px 0 30px rgba(
+        0,
+        0,
+        0,
+        0.12
+    );
+}
+
+.card,
+.form-card,
+.result-card{
+
+    background:
+    rgba(
+        255,
+        255,
+        255,
+        0.85
+    );
+
+    backdrop-filter:
+    blur(14px);
+
+    border:
+    1px solid rgba(
+        255,
+        255,
+        255,
+        0.3
+    );
+
+    transition:
+    all .25s ease;
+}
+
+.card:hover,
+.form-card:hover{
+
+    transform:
+    translateY(-5px);
+
+    box-shadow:
+    0 15px 40px rgba(
+        0,
+        0,
+        0,
+        0.08
+    );
+}
+
+button{
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+
+    font-weight:600;
+}
+
+button:hover{
+
+    transform:
+    translateY(-2px);
+}
+
+.page-title{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    margin-bottom:35px;
+}
+
+.metric-value{
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:#2563eb;
+}

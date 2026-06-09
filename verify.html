@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">
+    Identity Verification
+</h1>
+
+<div class="form-card">
+
+    <form id="verifyForm">
+
+        <div class="form-group">
+
+            <label>
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Date Of Birth
+            </label>
+
+            <input
+                type="text"
+                id="dob"
+                placeholder="DD/MM/YYYY"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Phone Number
+            </label>
+
+            <input
+                type="text"
+                id="phone"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Aadhaar Number
+            </label>
+
+            <input
+                type="text"
+                id="aadhaar"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                PAN Number
+            </label>
+
+            <input
+                type="text"
+                id="pan"
+            >
+
+        </div>
+        <div class="form-group">
+
+            <label>
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                Aadhaar Image
+            </label>
+
+            <input
+                type="file"
+                id="aadhaarFile"
+                accept="image/*"
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label>
+                PAN Image
+            </label>
+
+            <input
+                type="file"
+                id="panFile"
+                accept="image/*"
+            >
+
+        </div>
+
+        <button type="submit">
+
+            Verify Identity
+
+        </button>
+
+    </form>
+
+</div>
+
+<div
+    id="result"
+    style="display:none;"
+    class="result-card"
+>
+
+</div>
+
+<script>
+
+document
+.getElementById(
+    "verifyForm"
+)
+.addEventListener(
+
+    "submit",
+
+    async function(e){
+
+        e.preventDefault();
+
+        const formData =
+            new FormData();
+
+        formData.append(
+            "name",
+            document.getElementById(
+                "name"
+            ).value
+        );
+
+        formData.append(
+            "dob",
+            document.getElementById(
+                "dob"
+            ).value
+        );
+
+        formData.append(
+            "phone",
+            document.getElementById(
+                "phone"
+            ).value
+        );
+        formData.append(
+            "email",
+            document.getElementById(
+                "email"
+            ).value
+        );
+
+        formData.append(
+            "aadhaar_number",
+            document.getElementById(
+                "aadhaar"
+            ).value
+        );
+
+        formData.append(
+            "pan_number",
+            document.getElementById(
+                "pan"
+            ).value
+        );
+
+        const aadhaar =
+            document.getElementById(
+                "aadhaarFile"
+            ).files[0];
+
+        const pan =
+            document.getElementById(
+                "panFile"
+            ).files[0];
+
+        if(aadhaar){
+
+            formData.append(
+                "aadhaar_file",
+                aadhaar
+            );
+        }
+
+        if(pan){
+
+            formData.append(
+                "pan_file",
+                pan
+            );
+        }
+
+        const response =
+            await fetch(
+
+                "/documents/verify",
+
+                {
+
+                    method:"POST",
+
+                    body:formData
+                }
+            );
+
+        const data =
+            await response.json();
+        console.log(data);
+        alert(
+            JSON.stringify(
+                data,
+                null,
+                2
+            )
+        );
+        document
+        .getElementById(
+            "result"
+        )
+        .style.display =
+            "block";
+
+        document
+        .getElementById(
+            "result"
+        )
+        .innerHTML =
+
+        `
+        <h2>
+        Verification Result
+        </h2>
+
+        <p>
+        <strong>Status:</strong>
+        ${data.validation?.validation_result}
+        </p>
+
+        <p>
+        <strong>Validation Score:</strong>
+        ${data.validation?.validation_score}
+        </p>
+
+        <p>
+        <strong>Confidence:</strong>
+        ${data.confidence?.score}
+        </p>
+
+        <p>
+        <strong>Trace ID:</strong>
+        ${data.trace_id}
+        </p>
+
+        `;
+    }
+);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{
+  "contract_version": "1.0",
+
+  "validation_result": "VERIFIED | FAILED",
+
+  "validation_score": 0,
+
+  "field_results": {
+    "name": true,
+    "dob": true,
+    "aadhaar": true,
+    "pan": true,
+    "phone": true
+  }
+}

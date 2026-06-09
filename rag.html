@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">
+    Knowledge Assistant
+</h1>
+
+<div class="form-card">
+
+    <h2>
+        Upload Knowledge Document
+    </h2>
+
+    <br>
+
+    <form id="uploadForm">
+
+        <input
+            type="file"
+            id="pdfFile"
+            accept=".pdf"
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Upload PDF
+        </button>
+
+    </form>
+
+</div>
+
+<br>
+
+<div class="form-card">
+
+    <h2>
+        Ask Question
+    </h2>
+
+    <br>
+
+    <form id="questionForm">
+
+        <input
+            type="text"
+            id="question"
+            placeholder="Ask a question..."
+            required
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Ask
+        </button>
+
+    </form>
+
+</div>
+
+<div
+    id="ragResult"
+    class="result-card"
+    style="display:none;"
+></div>
+
+<script>
+
+document
+.getElementById("uploadForm")
+.addEventListener(
+
+    "submit",
+
+    async function(e){
+
+        e.preventDefault();
+
+        const formData =
+            new FormData();
+
+        const pdf =
+            document
+            .getElementById("pdfFile")
+            .files[0];
+
+        formData.append(
+            "file",
+            pdf
+        );
+
+        try{
+
+            const response =
+                await fetch(
+
+                    "/rag/upload",
+
+                    {
+                        method:"POST",
+                        body:formData
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            alert(
+                "PDF uploaded successfully."
+            );
+
+        }catch(error){
+
+            alert(
+                "Upload failed."
+            );
+
+            console.error(error);
+        }
+    }
+);
+
+document
+.getElementById("questionForm")
+.addEventListener(
+
+    "submit",
+
+    async function(e){
+
+        e.preventDefault();
+
+        const question =
+            document
+            .getElementById("question")
+            .value;
+
+        try{
+
+            const response =
+                await fetch(
+
+                    `/rag/ask?question=${encodeURIComponent(question)}`,
+
+                    {
+                        method:"POST"
+                    }
+                );
+
+            const data =
+                await response.json();
+
+            document
+            .getElementById("ragResult")
+            .style.display =
+                "block";
+
+            document
+            .getElementById("ragResult")
+            .innerHTML =
+
+            `
+            <h2>
+                Answer
+            </h2>
+
+            <p>
+                ${data.answer || "No answer returned"}
+            </p>
+
+            <hr>
+
+            <p>
+
+                <strong>
+                    Confidence:
+                </strong>
+
+                ${data.confidence ?? "N/A"}
+
+            </p>
+            `;
+
+        }catch(error){
+
+            document
+            .getElementById("ragResult")
+            .style.display =
+                "block";
+
+            document
+            .getElementById("ragResult")
+            .innerHTML =
+
+            `
+            <h2>
+                Error
+            </h2>
+
+            <p>
+                Failed to get answer.
+            </p>
+            `;
+
+            console.error(error);
+        }
+    }
+);
+
+</script>
+
+{% endblock %}

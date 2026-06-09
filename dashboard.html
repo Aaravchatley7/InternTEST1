@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="page-title">
+    Metrics Dashboard
+</h1>
+
+<div class="cards">
+
+    <div class="card metric-card">
+
+        <h3>
+            Total Requests
+        </h3>
+
+        <div
+            id="requests"
+            class="metric-value"
+        >
+            --
+        </div>
+
+    </div>
+
+    <div class="card metric-card">
+
+        <h3>
+            Total Errors
+        </h3>
+
+        <div
+            id="errors"
+            class="metric-value"
+        >
+            --
+        </div>
+
+    </div>
+
+    <div class="card metric-card">
+
+        <h3>
+            Average Latency
+        </h3>
+
+        <div
+            id="latency"
+            class="metric-value"
+        >
+            --
+        </div>
+
+    </div>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h3>
+        Request Statistics
+    </h3>
+
+    <br>
+
+    <table
+        style="
+        width:100%;
+        border-collapse:collapse;
+        "
+    >
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Metric
+                </th>
+
+                <th>
+                    Value
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+
+                <td>
+                    Total Requests
+                </td>
+
+                <td id="tableRequests">
+                    --
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    Total Errors
+                </td>
+
+                <td id="tableErrors">
+                    --
+                </td>
+
+            </tr>
+
+            <tr>
+
+                <td>
+                    Average Latency (ms)
+                </td>
+
+                <td id="tableLatency">
+                    --
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<br>
+
+<div class="card">
+
+    <h3>
+        Raw Metrics JSON
+    </h3>
+
+    <br>
+
+    <pre id="metricsRaw">
+
+Loading...
+
+    </pre>
+
+</div>
+
+<script>
+
+async function loadMetrics(){
+
+    try{
+
+        const response =
+            await fetch(
+                "/metrics"
+            );
+
+        const data =
+            await response.json();
+
+        document
+        .getElementById(
+            "requests"
+        )
+        .innerText =
+            data.total_requests;
+
+        document
+        .getElementById(
+            "errors"
+        )
+        .innerText =
+            data.total_errors;
+
+        document
+        .getElementById(
+            "latency"
+        )
+        .innerText =
+            Math.round(
+                data.average_latency
+            ) + " ms";
+
+        document
+        .getElementById(
+            "tableRequests"
+        )
+        .innerText =
+            data.total_requests;
+
+        document
+        .getElementById(
+            "tableErrors"
+        )
+        .innerText =
+            data.total_errors;
+
+        document
+        .getElementById(
+            "tableLatency"
+        )
+        .innerText =
+            data.average_latency;
+
+        document
+        .getElementById(
+            "metricsRaw"
+        )
+        .textContent =
+            JSON.stringify(
+                data,
+                null,
+                2
+            );
+
+    }
+
+    catch(error){
+
+        document
+        .getElementById(
+            "metricsRaw"
+        )
+        .textContent =
+            "Unable to load metrics.";
+
+        console.error(
+            error
+        );
+    }
+}
+
+loadMetrics();
+
+</script>
+
+{% endblock %}

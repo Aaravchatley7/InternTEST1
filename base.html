@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BHIV Multi-Input Intelligence Platform</title>
+
+    <link rel="stylesheet"
+          href="/static/css/style.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <h2>BHIV</h2>
+
+        <p>Intelligence Platform</p>
+
+    </div>
+
+    <nav>
+
+        <a href="/">
+            Dashboard
+        </a>
+
+        <a href="/verify-ui">
+            Identity Verification
+        </a>
+
+        <a href="/rag-ui">
+            Knowledge Assistant
+        </a>
+
+        <a href="/dashboard">
+            Metrics
+        </a>
+
+        <a href="/health-ui">
+            Health
+        </a>
+
+    </nav>
+
+</div>
+
+<div class="content">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
+
+</html>
