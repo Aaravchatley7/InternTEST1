@@ -17,14 +17,12 @@ class VerificationRequest(BaseModel):
 
 def validate_uploaded_files(
     aadhaar_file: UploadFile | None,
-    pan_file: UploadFile | None,
-    passport_file: UploadFile | None
+    pan_file: UploadFile | None
 ):
 
     if not any([
         aadhaar_file,
-        pan_file,
-        passport_file
+        pan_file
     ]):
         raise ValueError(
             "At least one document is required"
