@@ -1,0 +1,14 @@
+{
+    "validation_result": "VERIFIED",
+    "validation_score": 95,
+    "field_results": {
+        "name": true,
+        "dob": true,
+        "aadhaar": true,
+        "pan": false
+    },
+    "confidence": {
+        "score": 0.95,
+        "level": "HIGH"
+    }
+}
