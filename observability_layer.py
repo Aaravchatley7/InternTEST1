@@ -154,3 +154,22 @@ class ObservabilityLayer:
         logging.error(
             f"{trace_id} | {message}"
         )
+    @staticmethod
+    def get_health():
+
+        return {
+
+            "status":
+                "healthy",
+
+            "metrics_file":
+                os.path.exists(
+                    ObservabilityLayer
+                    .METRICS_FILE
+                ),
+
+            "logging":
+                os.path.exists(
+                    "logs/app.log"
+                )
+        }
