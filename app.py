@@ -169,95 +169,122 @@ async def verify_documents(
 
     aadhaar_file: UploadFile = File(None),
 
-    pan_file: UploadFile = File(None),
-
-    passport_file: UploadFile = File(None)
+    pan_file: UploadFile = File(None)
 
 ):
 
     trace_id = (
-    ObservabilityLayer
-    .create_trace()
+        ObservabilityLayer
+        .create_trace()
     )
 
     start_time = (
-    ObservabilityLayer
-    .start_timer()
+        ObservabilityLayer
+        .start_timer()
     )
+
+    latency = 0
 
     try:
 
         validate_uploaded_files(
             aadhaar_file,
-            pan_file,
-            passport_file
+            pan_file
         )
+
+        uploaded_file = None
+        document_type = None
 
         if aadhaar_file:
 
-            file_path = (
-                f"uploads/"
-                f"{aadhaar_file.filename}"
+            uploaded_file = aadhaar_file
+            document_type = "aadhaar"
+
+        elif pan_file:
+
+            uploaded_file = pan_file
+            document_type = "pan"
+
+        else:
+
+            raise Exception(
+                "No document uploaded"
             )
 
-            with open(
+        file_path = (
+            f"uploads/{uploaded_file.filename}"
+        )
+
+        with open(
+            file_path,
+            "wb"
+        ) as f:
+
+            f.write(
+                await uploaded_file.read()
+            )
+
+        extraction = (
+            ExtractionLayer
+            .extract_document(
                 file_path,
-                "wb"
-            ) as f:
-
-                f.write(
-                    await aadhaar_file.read()
-                )
-
-            extraction = (
-                ExtractionLayer
-                .extract_document(
-                    file_path,
-                    "aadhaar"
-                )
+                document_type
             )
+        )
 
-            identity = extraction["identity"]
+        print("\n===================")
+        print("DOCUMENT TYPE")
+        print(document_type)
 
-            form_data = {
+        print("\nEXTRACTION")
+        print(extraction)
+        print("===================\n")
 
-                "name":
-                    name,
+        identity = (
+            extraction["identity"]
+        )
 
-                "dob":
-                    dob,
+        form_data = {
 
-                "phone":
-                    phone,
+            "name":
+                name,
 
-                "aadhaar_number":
-                    aadhaar_number,
+            "dob":
+                dob,
 
-                "pan_number":
-                    pan_number
-            }
+            "phone":
+                phone,
 
-            validation = (
-                ValidationLayer.validate(
-                    form_data,
-                    identity
-                )
+            "aadhaar_number":
+                aadhaar_number,
+
+            "pan_number":
+                pan_number
+        }
+
+        validation = (
+            ValidationLayer.validate(
+                form_data,
+                identity
             )
-            confidence = (
+        )
+
+        confidence = (
             ConfidenceLayer.calculate(
                 validation,
                 identity
             )
         )
 
-            evidence = (
+        evidence = (
             EvidenceLayer.build(
                 form_data,
                 identity,
                 validation
             )
         )
-            latency = (
+
+        latency = (
             ObservabilityLayer
             .stop_timer(
                 start_time
@@ -270,8 +297,9 @@ async def verify_documents(
 
         ObservabilityLayer.log_success(
             trace_id,
-            "Verification completed"
+            f"{document_type} verification completed"
         )
+
         return {
 
             "trace_id":
@@ -279,6 +307,9 @@ async def verify_documents(
 
             "status":
                 "success",
+
+            "document_type":
+                document_type,
 
             "extraction":
                 extraction,
@@ -320,6 +351,11 @@ async def verify_documents(
             trace_id,
             str(e)
         )
+
+        print("\n===== ERROR =====")
+        print(str(e))
+        traceback.print_exc()
+        print("=================\n")
 
         return {
 
