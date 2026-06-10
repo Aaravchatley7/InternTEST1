@@ -2,27 +2,25 @@
 
 ## Overview
 
-The BHIV Multi-Input Intelligence Platform is a reusable intelligence and validation system designed to process multiple forms of input, extract structured information, validate identities, calculate confidence scores, provide evidence-backed decisions, and answer questions from uploaded documents.
+The BHIV Multi-Input Intelligence Platform is a reusable intelligence, validation, and document understanding system developed as part of the BHIV engineering build cycle.
 
-The platform combines:
+The platform combines identity verification, confidence scoring, evidence generation, observability, retrieval-augmented generation (RAG), and reusable validation capabilities into a single deployable architecture.
 
-- Identity Verification
-- OCR-based Information Extraction
-- LLM-based Field Understanding
-- Validation Engine
-- Confidence Scoring
-- Evidence Generation
-- Observability and Monitoring
-- Retrieval-Augmented Generation (RAG)
-- FastAPI Web Interface
+The system is designed to serve as a foundation for future BHIV products involving:
 
-This project serves as the foundation for future BHIV systems involving documents, forms, certificates, reports, invoices, structured records, and unstructured data.
+* Identity Documents
+* Certificates
+* Forms
+* Structured Records
+* Reports
+* Invoices
+* Knowledge Repositories
 
 ---
 
 # Architecture
 
-## High-Level Flow
+## High-Level Architecture
 
 ```text
 User Input
@@ -32,7 +30,7 @@ Input Layer
     │
     ▼
 Extraction Layer
-(EasyOCR + OpenRouter LLM)
+(OCR + Regex Recovery + LLM)
     │
     ▼
 Validation Layer
@@ -52,52 +50,60 @@ Trusted Output
 
 ---
 
-## Identity Verification Flow
+## Identity Verification Pipeline
 
 ```text
 User Form
 +
-PAN/Aadhaar Upload
+Document Upload
 
         │
         ▼
 
 OCR Extraction
+(EasyOCR + Tesseract)
 
         │
         ▼
 
-LLM Information Extraction
+Regex Recovery Layer
+(Aadhaar / PAN / DOB)
 
         │
         ▼
 
-Field Comparison
+LLM Extraction Layer
+(OpenRouter)
 
         │
         ▼
 
-Validation Engine
+Field Fusion Engine
 
         │
         ▼
 
-Confidence Calculation
+Validation Layer
 
         │
         ▼
 
-Evidence Generation
+Confidence Layer
 
         │
         ▼
 
-Verification Result
+Evidence Layer
+
+        │
+        ▼
+
+Verification Output
 ```
 
 ---
 
-## RAG Flow
+## RAG Pipeline
 
 ```text
 PDF Upload
@@ -159,50 +165,86 @@ Answer + Confidence
 
 ---
 
-# Features
+## Multi-Input Foundation
+
+The platform now includes a reusable capability registry to support future expansion.
+
+Supported Input Types:
+
+* Documents
+* Images
+* Forms
+* Structured JSON
+
+Future BHIV systems can reuse the same validation and confidence framework without architectural changes.
+
+---
+
+# Major Features
 
 ## Identity Verification
 
-- Aadhaar Verification
-- PAN Verification
-- OCR-based Extraction
-- LLM-based Entity Understanding
-- Validation Scoring
-- Confidence Scoring
-- Evidence Generation
-- Trace IDs
+* Aadhaar Verification
+* PAN Verification
+* OCR Extraction
+* Regex-Based Recovery
+* LLM-Based Extraction
+* Validation Scoring
+* Confidence Scoring
+* Evidence Generation
+* Trace IDs
+
+---
+
+## Validation Hardening
+
+Implemented:
+
+* Fuzzy Name Matching
+* Aadhaar Normalization
+* PAN Normalization
+* DOB Normalization
+* Phone Normalization
+* Typo Tolerance
+* Confidence Weighting
+
+---
+
+## Accuracy Recovery
+
+Implemented:
+
+* OCR Preprocessing
+* EasyOCR Support
+* Tesseract Fallback
+* Aadhaar Regex Recovery
+* PAN Regex Recovery
+* DOB Recovery
+* Field Fusion Logic
 
 ---
 
 ## Knowledge Assistant (RAG)
 
-- PDF Upload
-- Automatic Vectorization
-- FAISS Storage
-- Question Answering
-- Retrieval-Based Context Generation
-- Confidence Output
+* PDF Upload
+* Automatic Vectorization
+* FAISS Storage
+* Similarity Search
+* Context Retrieval
+* Question Answering
+* Confidence Output
 
 ---
 
 ## Observability
 
-- Health Endpoint
-- Metrics Endpoint
-- Request Tracking
-- Error Tracking
-- Latency Monitoring
-- Trace IDs
-
----
-
-## User Interface
-
-- Dashboard
-- Identity Verification Portal
-- Knowledge Assistant
-- Metrics Dashboard
-- Health Dashboard
+* Health Endpoint
+* Metrics Endpoint
+* Request Tracking
+* Error Tracking
+* Latency Monitoring
+* Logging
+* Trace IDs
 
 ---
 
@@ -211,9 +253,19 @@ Answer + Confidence
 ```text
 BHIV_Project/
 
-│
 ├── app.py
-│
+
+├── capabilities/
+│   ├── input_registry.py
+│   ├── input_contract_v1.json
+│   └── validation_contract_v2.json
+
+├── contracts/
+│   ├── identity_contract_v1.json
+│   ├── validation_contract_v1.json
+│   ├── confidence_contract_v1.json
+│   └── evidence_contract_v1.json
+
 ├── layers/
 │   ├── input_layer.py
 │   ├── extraction_layer.py
@@ -222,7 +274,7 @@ BHIV_Project/
 │   ├── evidence_layer.py
 │   ├── rag_layer.py
 │   └── observability_layer.py
-│
+
 ├── services/
 │   ├── ocr_service.py
 │   ├── llm_service.py
@@ -230,28 +282,20 @@ BHIV_Project/
 │   ├── rag_service.py
 │   ├── vector_service.py
 │   └── vector_builder.py
-│
-├── contracts/
-│   ├── identity_contract_v1.json
-│   ├── validation_contract_v1.json
-│   └── confidence_contract_v1.json
-│
-├── logs/
-│
-├── metrics/
-│
-├── review_packets/
-│
-├── templates/
-│
-├── static/
-│
-├── uploads/
-│
-├── vectorstore/
-│
+
+├── reports/
+│   ├── accuracy_report.md
+│   ├── validation_accuracy_report.md
+│   └── deployment_report.md
+
 ├── tests/
-│
+
+├── review_packets/
+
+├── uploads/
+
+├── vectorstore/
+
 └── README.md
 ```
 
@@ -259,304 +303,134 @@ BHIV_Project/
 
 # Technologies Used
 
-## Backend
+Backend:
 
-- FastAPI
-- Python
+* FastAPI
+* Python
 
-## OCR
+OCR:
 
-- EasyOCR
+* EasyOCR
+* Tesseract OCR
 
-## LLM
+LLM:
 
-- OpenRouter API
-- GPT OSS Model
+* OpenRouter
+* GPT OSS
 
-## Vector Database
+Vector Database:
 
-- FAISS
+* FAISS
 
-## RAG
+RAG Framework:
 
-- LangChain
+* LangChain
 
-## Frontend
+Frontend:
 
-- HTML
-- CSS
-- JavaScript
-- Jinja2 Templates
+* HTML
+* CSS
+* JavaScript
+* Jinja2
 
-## Testing
+Testing:
 
-- Pytest
-
----
-
-# Environment Setup
-
-## 1. Clone Repository
-
-```bash
-git clone <repository-url>
-cd BHIV_Project
-```
-
----
-
-## 2. Create Virtual Environment
-
-```bash
-python -m venv venv
-```
-
-Activate:
-
-### Windows
-
-```bash
-venv\Scripts\activate
-```
-
-### Linux / Mac
-
-```bash
-source venv/bin/activate
-```
-
----
-
-## 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## 4. Configure Environment Variables
-
-Create:
-
-```text
-.env
-```
-
-Add:
-
-```env
-OPENROUTER_API_KEY=your_api_key_here
-```
-
----
-
-# How To Run
-
-## Start Application
-
-```bash
-uvicorn app:app --reload
-```
-
-Server:
-
-```text
-http://127.0.0.1:8000
-```
-
-Swagger:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
----
-
-# How To Use
-
-## Identity Verification
-
-1. Open:
-
-```text
-http://127.0.0.1:8000/verify-ui
-```
-
-2. Enter:
-
-- Name
-- DOB
-- Email
-- Phone
-- Aadhaar Number
-- PAN Number
-
-3. Upload:
-
-- Aadhaar Image
-- PAN Image
-
-4. Click:
-
-```text
-Verify Identity
-```
-
-5. View:
-
-- Validation Result
-- Validation Score
-- Confidence Score
-- Evidence
-- Trace ID
-
----
-
-## Knowledge Assistant
-
-1. Open:
-
-```text
-http://127.0.0.1:8000/rag-ui
-```
-
-2. Upload PDF
-
-3. Ask Questions
-
-Examples:
-
-```text
-What is Probability?
-
-Explain Bayes Theorem.
-
-Summarize Chapter 3.
-```
-
-4. View:
-
-- Answer
-- Confidence
-
----
-
-# API Endpoints
-
-## Identity Verification
-
-```http
-POST /documents/verify
-```
-
----
-
-## Upload PDF
-
-```http
-POST /rag/upload
-```
-
----
-
-## Ask Question
-
-```http
-POST /rag/ask
-```
-
----
-
-## Health Check
-
-```http
-GET /health
-```
-
----
-
-## Metrics
-
-```http
-GET /metrics
-```
+* Pytest
 
 ---
 
 # Testing
 
-Run all tests:
+Current Test Coverage Includes:
+
+* OCR Extraction
+* Aadhaar Recovery
+* PAN Recovery
+* Validation Logic
+* Confidence Scoring
+* Identity Pipeline
+* Health Checks
+* Metrics Validation
+* Observability
+* Trace ID Generation
+* RAG Functionality
+
+Target Achieved:
+
+10+ Automated Tests
+
+Run:
 
 ```bash
 pytest
 ```
 
-Expected:
+---
 
-```text
-4 passed
-```
+# Reports
+
+Generated Reports:
+
+* accuracy_report.md
+* validation_accuracy_report.md
+* deployment_report.md
+* REVIEW_PACKET.md
 
 ---
 
 # Deliverables Implemented
 
-## Phase 1
+## Phase 1 – Accuracy Recovery
 
-- PAN Extraction
-- Aadhaar Extraction
-- Validation Engine
-- Comparison Engine
-- Confidence Engine
+* OCR Improvements
+* Aadhaar Recovery
+* PAN Recovery
+* Extraction Fallback Logic
+* Accuracy Reporting
 
-## Phase 2
+## Phase 2 – Validation Hardening
 
-- Input Layer
-- Extraction Layer
-- Validation Layer
-- Confidence Layer
-- Evidence Layer
-- Output Layer
+* Fuzzy Matching
+* Normalization
+* Confidence Weighting
 
-## Phase 3
+## Phase 3 – Multi-Input Foundation
 
-- RAG Pipeline
-- Evidence-Based Responses
+* Capability Registry
+* Input Contracts
+* Validation Contract V2
 
-## Phase 4
+## Phase 4 – Testing
 
-- Health Endpoint
-- Metrics Endpoint
-- Trace IDs
-- Request Monitoring
+* Expanded Test Coverage
+* Identity Pipeline Testing
+* Health Testing
+* Metrics Testing
 
-## Phase 5
+## Phase 5 – Deployment
 
-- Accuracy Reporting Framework
+* FastAPI Deployment
+* Deployment Evidence
+* Endpoint Validation
 
-## Phase 6
+## Phase 6 – Documentation
 
-- FastAPI Deployment
-- UI Integration
-
-## Phase 7
-
-- Review Packet
-- README
-- Contracts
-- Documentation
+* README
+* REVIEW_PACKET
+* Accuracy Report
+* Validation Report
+* Deployment Report
 
 ---
 
-# Future Improvements
+# Future Enhancements
 
-- Passport Verification
-- Multi-Document Validation
-- Cloud Deployment
-- OpenTelemetry Integration
-- Advanced Confidence Calibration
-- Continuous Evaluation Pipelines
+* Passport Verification
+* Invoice Verification
+* Certificate Verification
+* OpenTelemetry Integration
+* Cloud Deployment
+* Continuous Evaluation Pipelines
 
 ---
 
@@ -564,4 +438,5 @@ Expected:
 
 Aarav Chatley
 
-BHIV Build Cycle Submission
+BHIV Multi-Input Intelligence Platform
+Task 1 → Task 4 Repository Continuation
