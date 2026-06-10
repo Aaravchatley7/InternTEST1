@@ -1,8 +1,7 @@
 import cv2
 import easyocr
 import pytesseract
-import numpy as np
-from PIL import Image
+import re
 
 reader = easyocr.Reader(
     ['en'],
@@ -33,12 +32,17 @@ class OCRService:
             0
         )
 
-        _, thresh = cv2.threshold(
+        gray = cv2.fastNlMeansDenoising(
+            gray
+        )
+
+        thresh = cv2.adaptiveThreshold(
             gray,
-            0,
             255,
-            cv2.THRESH_BINARY +
-            cv2.THRESH_OTSU
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+            cv2.THRESH_BINARY,
+            11,
+            2
         )
 
         return thresh
@@ -46,51 +50,163 @@ class OCRService:
     @staticmethod
     def easyocr_extract(image_path):
 
-        result = reader.readtext(
+        results = reader.readtext(
             image_path,
-            detail=0
+            detail=1
         )
 
-        return "\n".join(result)
+        text = "\n".join(
+            [r[1] for r in results]
+        )
+
+        confidence = 0
+
+        if results:
+
+            confidence = sum(
+                r[2] for r in results
+            ) / len(results)
+
+        return {
+
+            "engine":
+                "easyocr",
+
+            "text":
+                text,
+
+            "confidence":
+                round(
+                    confidence,
+                    2
+                )
+        }
 
     @staticmethod
     def tesseract_extract(image_path):
 
-        img = OCRService.preprocess(
+        processed = OCRService.preprocess(
             image_path
         )
 
         text = pytesseract.image_to_string(
-            img,
-            config="--oem 3 --psm 6"
+
+            processed,
+
+            config=
+            "--oem 3 --psm 6"
         )
 
-        return text
+        return {
+
+            "engine":
+                "tesseract",
+
+            "text":
+                text,
+
+            "confidence":
+                0.50
+        }
 
     @staticmethod
     def extract_text(image_path):
 
-        easy_text = OCRService.easyocr_extract(
+        easy = OCRService.easyocr_extract(
             image_path
         )
 
-        tess_text = OCRService.tesseract_extract(
+        tess = OCRService.tesseract_extract(
             image_path
         )
 
-        if len(easy_text) >= len(tess_text):
-            return {
-                "ocr_engine":
-                    "easyocr",
+        if easy["confidence"] >= 0.50:
 
-                "text":
-                    easy_text
-            }
+            return easy
+
+        if len(easy["text"]) >= len(tess["text"]):
+
+            return easy
+
+        return tess
+
+    @staticmethod
+    def extract_aadhaar(text):
+
+        matches = re.findall(
+            r"\d{4}[\s\-\.]?\d{4}[\s\-\.]?\d{4}",
+            text
+        )
+
+        if matches:
+
+            return re.sub(
+                r"\D",
+                "",
+                matches[0]
+            )
+
+        return ""
+
+    @staticmethod
+    def extract_pan(text):
+
+        matches = re.findall(
+            r"[A-Z]{5}[0-9]{4}[A-Z]",
+            text.upper()
+        )
+
+        if matches:
+
+            return matches[0]
+
+        return ""
+
+    @staticmethod
+    def extract_dob(text):
+
+        patterns = [
+
+            r"\d{2}/\d{2}/\d{4}",
+
+            r"\d{2}-\d{2}-\d{4}",
+
+            r"\d{4}-\d{2}-\d{2}"
+        ]
+
+        for pattern in patterns:
+
+            match = re.search(
+                pattern,
+                text
+            )
+
+            if match:
+
+                return match.group()
+
+        return ""
+
+    @staticmethod
+    def extract_fields(text):
 
         return {
-            "ocr_engine":
-                "tesseract",
 
-            "text":
-                tess_text
+            "aadhaar_number":
+
+                OCRService.extract_aadhaar(
+                    text
+                ),
+
+            "pan_number":
+
+                OCRService.extract_pan(
+                    text
+                ),
+
+            "dob":
+
+                OCRService.extract_dob(
+                    text
+                )
         }
