@@ -40,6 +40,12 @@ from layers.rag_layer import (
 from services.vector_builder import (
     VectorBuilder
 )
+from services.provenance_service import (
+    ProvenanceService
+)
+from capabilities.input_registry import (
+    InputRegistry
+)
 load_dotenv()
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
@@ -275,6 +281,17 @@ async def verify_documents(
                 identity
             )
         )
+        provenance = (
+
+            ProvenanceService.build(
+
+                trace_id,
+
+                document_type,
+
+                "validation_layer"
+            )
+        )
 
         evidence = (
             EvidenceLayer.build(
@@ -319,6 +336,9 @@ async def verify_documents(
 
             "confidence":
                 confidence,
+
+            "provenance":
+                provenance,
 
             "evidence":
                 evidence,
@@ -429,4 +449,15 @@ def metrics():
     return (
         ObservabilityLayer
         .get_metrics()
+    )
+
+@app.get(
+    "/capabilities"
+)
+def capabilities():
+
+    return (
+
+        InputRegistry
+        .get_capabilities()
     )
