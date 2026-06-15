@@ -2,179 +2,428 @@
 
 # BHIV Multi-Input Intelligence Platform
 
-## Project Overview
+## Capability Version
 
-This project delivers a reusable Multi-Input Intelligence and Validation Capability capable of identity verification, confidence scoring, evidence generation, observability, and document question answering.
+v5
 
-The platform was developed incrementally across multiple BHIV tasks while maintaining repository continuity.
+## Repository Status
+
+Active
+
+## Capability Classification
+
+Reusable Intelligence Capability
+
+---
+
+# Executive Summary
+
+The BHIV Multi-Input Intelligence Platform is a reusable intelligence and validation capability that evolved through five development phases while maintaining repository continuity.
+
+The capability provides:
+
+* Extraction
+* Validation
+* Confidence Scoring
+* Evidence Generation
+* Observability
+* Provenance
+* Knowledge Intelligence (RAG)
+
+The capability is designed for reuse across future BHIV systems.
 
 ---
 
 # Entry Point
 
+Application Entry:
+
+```text
 app.py
+```
+
+Startup Command:
+
+```bash
+uvicorn app:app --reload
+```
+
+Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# Application Startup Path
+
+```text
+app.py
+
+    │
+
+    ▼
+
+FastAPI Initialization
+
+    │
+
+    ▼
+
+Route Registration
+
+    │
+
+    ▼
+
+Layer Initialization
+
+    │
+
+    ▼
+
+Service Loading
+
+    │
+
+    ▼
+
+Capability Activation
+```
 
 ---
 
 # Core Execution Flow
 
-User Input
+```text
+Input
 
-↓
+    │
 
-Input Validation Layer
+    ▼
 
-↓
+Input Layer
 
-OCR Extraction Layer
+    │
 
-↓
+    ▼
 
-LLM Extraction Layer
+Extraction Layer
 
-↓
+    │
+
+    ▼
 
 Validation Layer
 
-↓
+    │
+
+    ▼
 
 Confidence Layer
 
-↓
+    │
+
+    ▼
 
 Evidence Layer
 
-↓
+    │
+
+    ▼
 
 Observability Layer
 
-↓
+    │
 
-Trusted Output
+    ▼
 
----
-
-# Top 3 Critical Files
-
-### app.py
-
-Primary application entry point and API routing layer.
-
-### layers/extraction_layer.py
-
-Coordinates OCR extraction, regex recovery, LLM extraction, and field fusion.
-
-### services/ocr_service.py
-
-Provides OCR preprocessing, extraction, fallback recovery, and document field detection.
+Consumer
+```
 
 ---
 
-# Supported Capabilities
+# Repository Evolution
+
+## Task 1
+
+Introduced:
+
+* OCR
+* Aadhaar Verification
+* PAN Verification
+* LLM Extraction
+
+---
+
+## Task 2
+
+Introduced:
+
+* Validation
+* Confidence
+* Evidence
+
+---
+
+## Task 3
+
+Introduced:
+
+* RAG
+* Vector Search
+* Knowledge Intelligence
+
+---
+
+## Task 4
+
+Introduced:
+
+* Accuracy Recovery
+* Validation Hardening
+* Testing Expansion
+* Multi-Input Foundation
+
+---
+
+## Task 5
+
+Introduced:
+
+* Provenance
+* Lineage
+* Capability Registry
+* Ecosystem Readiness
+* Deployment Proof
+
+---
+
+# What Changed
+
+## Added
+
+### Services
+
+* provenance_service.py
+
+### Capabilities
+
+* input_registry.py
+
+### Documentation
+
+* repository_lineage.md
+* repository_growth_map.md
+* capability_evolution_timeline.md
+* deployment_proof.md
+* deployment_evidence_packet.md
+* deployment_architecture.md
+* evaluation_framework.md
+* accuracy_validation_packet.md
+* dataset_lineage.md
+* failure_analysis_report.md
+* capability_authority_matrix.md
+* capability_scope_definition.md
+* consumer_attachment_model.md
+* provenance_specification.md
+* traceability_design.md
+* observability_extension.md
+* ecosystem_attachment_map.md
+* consumer_integration_guide.md
+* capability_registry_entry.md
+* CAPABILITY_CONVERGENCE_REPORT.md
+
+---
+
+## Modified
+
+### Core Application
+
+* app.py
+
+### OCR
+
+* services/ocr_service.py
+
+### Extraction
+
+* layers/extraction_layer.py
+
+### Validation
+
+* layers/validation_layer.py
+
+### Comparison
+
+* services/comparison_service.py
+
+### Observability
+
+* layers/observability_layer.py
+
+### Documentation
+
+* README.md
+
+---
+
+## Untouched
+
+Core RAG Architecture
+
+* rag_layer.py
+* rag_service.py
+* vector_service.py
+* vector_builder.py
+
+These components remained stable during the convergence sprint.
+
+---
+
+# Capability Inventory
 
 ## Identity Verification
 
-* Aadhaar Verification
-* PAN Verification
-* OCR Extraction
-* LLM Extraction
-* Confidence Scoring
-* Evidence Generation
+Inputs:
 
-## Knowledge Assistant
+* Aadhaar
+* PAN
 
-* PDF Upload
-* Vector Database Creation
-* Retrieval Augmented Generation
-* Context-Aware Question Answering
+Outputs:
+
+* Validation
+* Confidence
+* Evidence
+
+---
+
+## Knowledge Intelligence
+
+Inputs:
+
+* PDF Documents
+
+Outputs:
+
+* Answers
+* Confidence
+
+---
 
 ## Observability
 
-* Metrics Tracking
-* Latency Monitoring
-* Error Tracking
+Outputs:
+
+* Metrics
 * Trace IDs
+* Logs
 
 ---
 
-# Real Request Example
+## Provenance
 
-POST /documents/verify
+Outputs:
 
-Input:
-
-* Name
-* DOB
-* Aadhaar Number
-* PAN Number
-* Uploaded Identity Document
-
----
-
-# Real Response Example
-
-```json
-{
-  "status": "success",
-  "validation_result": "VERIFIED",
-  "validation_score": 95,
-  "confidence": {
-    "score": 0.95,
-    "level": "HIGH"
-  }
-}
-```
+* Request IDs
+* Contract Versions
+* Evaluation Versions
+* Source Metadata
 
 ---
 
 # Failure Cases
 
-### OCR Failure
+## OCR Failure
 
-Cause:
+Examples:
 
-* Low quality image
-* Blurred image
-* Partial document capture
-
-Mitigation:
-
-* OCR preprocessing
-* EasyOCR fallback
-* Regex recovery
-
-### Validation Failure
-
-Cause:
-
-* Incorrect submitted information
-* Missing identifiers
+* Blurred Images
+* Low Resolution
+* Partial Documents
 
 Mitigation:
 
-* Fuzzy matching
-* Normalization logic
+* OCR Preprocessing
+* EasyOCR
+* Tesseract Fallback
 
 ---
 
-# Testing Evidence
+## Validation Failure
 
-Current Test Coverage Includes:
+Examples:
 
-* OCR Extraction
-* Aadhaar Regex Recovery
-* PAN Regex Recovery
-* Validation Logic
-* Confidence Calculation
-* Identity Pipeline
-* Metrics
-* Health
-* Observability
-* Trace IDs
+* Incorrect User Data
+* Identifier Mismatch
 
-Target Achieved:
+Mitigation:
 
-10+ Passing Tests
+* Fuzzy Matching
+* Normalization
+
+---
+
+## RAG Failure
+
+Examples:
+
+* Missing Context
+* Weak Source Material
+
+Mitigation:
+
+* Similarity Search
+* Context Retrieval
+
+---
+
+## LLM Failure
+
+Examples:
+
+* Hallucination
+* Missing OCR Context
+
+Mitigation:
+
+* Regex Recovery
+* Evidence Layer
+* Confidence Layer
+
+---
+
+## Deployment Failure
+
+Examples:
+
+* Missing Environment Variables
+* Missing Vector Store
+
+Mitigation:
+
+* Deployment Documentation
+* Environment Validation
+
+---
+
+# Provenance Model
+
+Implemented Fields:
+
+* trace_id
+* request_id
+* schema_version
+* contract_version
+* evaluation_version
+* timestamp
+* origin_source
+* confidence_source
+
+Purpose:
+
+Enable reconstruction and replay of outputs.
 
 ---
 
@@ -182,74 +431,140 @@ Target Achieved:
 
 Verified:
 
-* FastAPI Startup
-* Swagger Access
+* Application Startup
+* Swagger UI
 * Verification Endpoint
 * Health Endpoint
 * Metrics Endpoint
-* RAG Endpoints
+* RAG Upload
+* RAG Question Answering
 
-Evidence Stored In:
+Evidence Location:
 
+```text
 review_packets/screenshots/
+```
 
 ---
 
-# What Changed During Task 4
+# Evaluation Evidence
 
-### Accuracy Recovery
+Extraction Accuracy:
 
-* OCR preprocessing improvements
-* Aadhaar extraction recovery
-* PAN extraction recovery
-* Regex fallback logic
+85%
 
-### Validation Hardening
+Validation Accuracy:
 
-* Fuzzy name matching
-* Identifier normalization
-* Confidence weighting
+90%
 
-### Multi-Input Foundation
+False Positive Rate:
 
-* Input Registry
-* Input Contracts
-* Validation Contracts
+5%
 
-### Testing Expansion
+False Negative Rate:
 
-* Added automated test coverage
-* Added health and metrics validation
+5%
 
----
+Evaluation Artifacts:
 
-# Known Limitations
-
-* OCR accuracy depends on image quality
-* RAG quality depends on uploaded document quality
-* Limited identity document support (Aadhaar and PAN)
+* accuracy_report.md
+* validation_accuracy_report.md
+* evaluation_framework.md
+* accuracy_validation_packet.md
 
 ---
 
-# Next Builder Instructions
+# Testing Evidence
 
-1. Add Passport support if required.
-2. Introduce OpenTelemetry integration.
-3. Expand validation contract versions.
-4. Add cloud deployment support.
-5. Implement continuous evaluation pipeline.
-6. Add automated accuracy benchmarking.
+Coverage Includes:
+
+* OCR Recovery
+* PAN Extraction
+* Aadhaar Extraction
+* Validation
+* Confidence
+* Metrics
+* Health
+* Traceability
+* Identity Pipeline
+* RAG
+
+Result:
+
+10+ Automated Tests Passing
 
 ---
 
-# Final Status
+# Ecosystem Position
 
-Deployment Ready: YES
+Capability Type:
+
+Reusable Intelligence Capability
+
+Potential Consumers:
+
+* UniGuru
+* Parikshak
+* Signals Corps
+* Verification Systems
+* Knowledge Platforms
+
+---
+
+# Authority Boundaries
+
+Owned:
+
+* Extraction
+* Validation
+* Confidence
+* Evidence
+* Observability
+
+Not Owned:
+
+* Governance
+* Authorization
+* Policy Decisions
+* Legal Determinations
+* Truth Ownership
+
+---
+
+# Final Assessment
 
 Repository Continuity Maintained: YES
 
-Validation Capability Delivered: YES
+Deployment Proven: YES
 
-Testing Evidence Available: YES
+Accuracy Measured: YES
 
-Documentation Complete: YES
+Validation Measured: YES
+
+Observability Implemented: YES
+
+Provenance Implemented: YES
+
+Authority Boundaries Defined: YES
+
+Ecosystem Readiness Achieved: YES
+
+Capability Convergence Achieved: YES
+
+---
+
+# Reviewer Guidance
+
+To review the capability:
+
+1. Read README.md
+2. Review repository_lineage.md
+3. Review deployment_proof.md
+4. Review evaluation_framework.md
+5. Review capability_authority_matrix.md
+6. Execute pytest
+7. Verify health and metrics endpoints
+8. Execute verification workflow
+9. Execute RAG workflow
+
+The repository contains sufficient evidence to reconstruct, validate, deploy, and reuse the capability.
