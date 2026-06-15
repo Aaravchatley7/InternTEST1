@@ -1,36 +1,47 @@
 class InputRegistry:
 
-    SUPPORTED_INPUTS = {
+    CAPABILITIES = {
 
-        "document": {
-            "enabled": True,
-            "formats": [
-                "pdf",
-                "jpg",
-                "jpeg",
-                "png"
+        "identity_verification": {
+
+            "inputs": [
+
+                "aadhaar",
+
+                "pan"
+            ],
+
+            "outputs": [
+
+                "validation",
+
+                "confidence",
+
+                "evidence"
             ]
         },
 
-        "image": {
-            "enabled": True,
-            "formats": [
-                "jpg",
-                "jpeg",
-                "png"
+        "knowledge_assistant": {
+
+            "inputs": [
+
+                "pdf"
+            ],
+
+            "outputs": [
+
+                "answer",
+
+                "confidence"
             ]
-        },
-
-        "form": {
-            "enabled": True
-        },
-
-        "structured_json": {
-            "enabled": True
         }
     }
 
-    @classmethod
-    def get_supported_inputs(cls):
+    @staticmethod
+    def get_capabilities():
 
-        return cls.SUPPORTED_INPUTS
+        return (
+
+            InputRegistry
+            .CAPABILITIES
+        )
