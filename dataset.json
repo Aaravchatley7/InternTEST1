@@ -1,0 +1,352 @@
+[
+    {
+        "id": 1,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": false
+    },
+    {
+        "id": 2,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 3,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 4,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 5,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 6,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 7,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 8,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 9,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 10,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 11,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 12,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 13,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 14,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 15,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 16,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": true
+    },
+    {
+        "id": 17,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 18,
+        "document_type": "pan",
+        "case_type": "invalid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 19,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 20,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 21,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 22,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 23,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 24,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 25,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 26,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": true
+    },
+    {
+        "id": 27,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 28,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 29,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": true
+    },
+    {
+        "id": 30,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 31,
+        "document_type": "pan",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 32,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 33,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 34,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 35,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 36,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 37,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": false
+    },
+    {
+        "id": 38,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": false
+    },
+    {
+        "id": 39,
+        "document_type": "pan",
+        "case_type": "invalid",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 40,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 41,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 42,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 43,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 44,
+        "document_type": "aadhaar",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": false
+    },
+    {
+        "id": 45,
+        "document_type": "aadhaar",
+        "case_type": "invalid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 46,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": false
+    },
+    {
+        "id": 47,
+        "document_type": "pan",
+        "case_type": "ocr_noise",
+        "predicted": false,
+        "actual": true
+    },
+    {
+        "id": 48,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 49,
+        "document_type": "aadhaar",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": true
+    },
+    {
+        "id": 50,
+        "document_type": "pan",
+        "case_type": "valid",
+        "predicted": true,
+        "actual": false
+    }
+]
