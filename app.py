@@ -46,6 +46,13 @@ from services.provenance_service import (
 from capabilities.input_registry import (
     InputRegistry
 )
+from services.evidence_ledger import (
+    EvidenceLedger
+)
+
+from services.replay_service import (
+    ReplayService
+)
 load_dotenv()
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
@@ -130,23 +137,10 @@ async def health_ui(request: Request):
 @app.get("/health")
 def health():
 
-    return {
-
-        "status":
-            "healthy",
-
-        "services": {
-
-            "ocr":
-                "UP",
-
-            "llm":
-                "UP",
-
-            "validation":
-                "UP"
-        }
-    }
+    return (
+        ObservabilityLayer
+        .health()
+    )
 
 
 @app.get("/version")
@@ -317,7 +311,7 @@ async def verify_documents(
             f"{document_type} verification completed"
         )
 
-        return {
+        response_payload = {
 
             "trace_id":
                 trace_id,
@@ -352,6 +346,23 @@ async def verify_documents(
                     latency
             }
         }
+        EvidenceLedger.store(
+
+            trace_id,
+
+            form_data,
+
+            extraction,
+
+            validation,
+
+            confidence,
+
+            evidence,
+
+            response_payload
+        )
+        return response_payload
 
     except Exception as e:
 
@@ -460,4 +471,15 @@ def capabilities():
 
         InputRegistry
         .get_capabilities()
+    )
+@app.get(
+    "/replay/{trace_id}"
+)
+def replay_trace(
+    trace_id: str
+):
+
+    return (
+        ReplayService
+        .replay(trace_id)
     )
