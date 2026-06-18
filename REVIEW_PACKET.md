@@ -4,33 +4,34 @@
 
 ## Capability Version
 
-v5
+v6
+
+## Capability Classification
+
+Verifiable Intelligence Capability
 
 ## Repository Status
 
 Active
 
-## Capability Classification
-
-Reusable Intelligence Capability
-
 ---
 
 # Executive Summary
 
-The BHIV Multi-Input Intelligence Platform is a reusable intelligence and validation capability that evolved through five development phases while maintaining repository continuity.
+The BHIV Multi-Input Intelligence Platform is a reusable and verifiable intelligence capability designed to process identity documents, perform validation, generate confidence scores, provide evidence-backed decisions, support Retrieval-Augmented Generation (RAG), and enable deterministic replay of historical decisions.
 
-The capability provides:
+The platform has evolved through multiple development phases while maintaining repository continuity.
 
-* Extraction
-* Validation
-* Confidence Scoring
-* Evidence Generation
-* Observability
-* Provenance
-* Knowledge Intelligence (RAG)
+The latest evolution introduces:
 
-The capability is designed for reuse across future BHIV systems.
+* Evidence Ledger
+* Replay Engine
+* Replay API
+* Confidence Explainability
+* Deterministic Reconstruction
+* Reproducible Evaluation Framework
+
+This allows a reviewer to reconstruct historical outputs without rerunning OCR, extraction, validation, or confidence workflows.
 
 ---
 
@@ -56,39 +57,19 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# Application Startup Path
+# Application Startup Flow
 
 ```text
 app.py
-
-    │
-
-    ▼
-
+    ↓
 FastAPI Initialization
-
-    │
-
-    ▼
-
+    ↓
 Route Registration
-
-    │
-
-    ▼
-
+    ↓
 Layer Initialization
-
-    │
-
-    ▼
-
-Service Loading
-
-    │
-
-    ▼
-
+    ↓
+Service Initialization
+    ↓
 Capability Activation
 ```
 
@@ -96,50 +77,44 @@ Capability Activation
 
 # Core Execution Flow
 
+## Verification Flow
+
 ```text
-Input
-
-    │
-
-    ▼
-
+User Input
+    ↓
 Input Layer
-
-    │
-
-    ▼
-
+    ↓
 Extraction Layer
-
-    │
-
-    ▼
-
+    ↓
 Validation Layer
-
-    │
-
-    ▼
-
+    ↓
 Confidence Layer
-
-    │
-
-    ▼
-
+    ↓
 Evidence Layer
+    ↓
+Provenance
+    ↓
+Ledger Storage
+    ↓
+Response
+```
 
-    │
+---
 
-    ▼
+## Replay Flow
 
-Observability Layer
-
-    │
-
-    ▼
-
-Consumer
+```text
+Trace ID
+    ↓
+Replay API
+    ↓
+Replay Service
+    ↓
+Evidence Ledger
+    ↓
+Stored Artifacts
+    ↓
+Reconstructed Output
 ```
 
 ---
@@ -148,7 +123,9 @@ Consumer
 
 ## Task 1
 
-Introduced:
+Identity Verification Foundation
+
+Capabilities:
 
 * OCR
 * Aadhaar Verification
@@ -159,7 +136,9 @@ Introduced:
 
 ## Task 2
 
-Introduced:
+Trust Layer Introduction
+
+Capabilities:
 
 * Validation
 * Confidence
@@ -169,34 +148,54 @@ Introduced:
 
 ## Task 3
 
-Introduced:
+Knowledge Intelligence
+
+Capabilities:
 
 * RAG
+* PDF Question Answering
 * Vector Search
-* Knowledge Intelligence
 
 ---
 
 ## Task 4
 
-Introduced:
+Production Hardening
 
-* Accuracy Recovery
+Capabilities:
+
+* OCR Recovery
 * Validation Hardening
-* Testing Expansion
+* Testing Framework
 * Multi-Input Foundation
 
 ---
 
 ## Task 5
 
-Introduced:
+Capability Convergence
+
+Capabilities:
 
 * Provenance
-* Lineage
 * Capability Registry
+* Lineage Documentation
 * Ecosystem Readiness
-* Deployment Proof
+
+---
+
+## Task 6
+
+Deterministic Replay
+
+Capabilities:
+
+* Evidence Ledger
+* Replay Service
+* Replay API
+* Confidence Explainability
+* Dataset Evaluation
+* Reproducible Metrics
 
 ---
 
@@ -206,62 +205,51 @@ Introduced:
 
 ### Services
 
+* evidence_ledger.py
+* replay_service.py
 * provenance_service.py
 
-### Capabilities
+### Evaluation
 
-* input_registry.py
+* evaluation/dataset.json
+* evaluation_results.json
+* run_evaluation.py
+
+### Testing
+
+* test_replay.py
+* test_replay_deterministic.py
+* test_evidence_ledger.py
+* test_confidence_explanation.py
+* test_evaluation.py
 
 ### Documentation
 
+* evidence_truth_report.md
+* deterministic_replay_architecture.md
 * repository_lineage.md
-* repository_growth_map.md
-* capability_evolution_timeline.md
 * deployment_proof.md
-* deployment_evidence_packet.md
-* deployment_architecture.md
 * evaluation_framework.md
-* accuracy_validation_packet.md
-* dataset_lineage.md
-* failure_analysis_report.md
-* capability_authority_matrix.md
-* capability_scope_definition.md
-* consumer_attachment_model.md
-* provenance_specification.md
-* traceability_design.md
-* observability_extension.md
-* ecosystem_attachment_map.md
-* consumer_integration_guide.md
-* capability_registry_entry.md
-* CAPABILITY_CONVERGENCE_REPORT.md
 
 ---
 
 ## Modified
 
-### Core Application
+### Core
 
 * app.py
 
-### OCR
+### Layers
 
-* services/ocr_service.py
+* confidence_layer.py
+* extraction_layer.py
+* validation_layer.py
+* observability_layer.py
 
-### Extraction
+### Services
 
-* layers/extraction_layer.py
-
-### Validation
-
-* layers/validation_layer.py
-
-### Comparison
-
-* services/comparison_service.py
-
-### Observability
-
-* layers/observability_layer.py
+* ocr_service.py
+* comparison_service.py
 
 ### Documentation
 
@@ -271,14 +259,14 @@ Introduced:
 
 ## Untouched
 
-Core RAG Architecture
+Core RAG Components
 
 * rag_layer.py
 * rag_service.py
-* vector_service.py
 * vector_builder.py
+* vector_service.py
 
-These components remained stable during the convergence sprint.
+These remained stable during the replay sprint.
 
 ---
 
@@ -299,16 +287,28 @@ Outputs:
 
 ---
 
-## Knowledge Intelligence
+## Knowledge Assistant
 
 Inputs:
 
-* PDF Documents
+* PDF
 
 Outputs:
 
 * Answers
 * Confidence
+
+---
+
+## Replay Capability
+
+Input:
+
+* trace_id
+
+Output:
+
+* Full Reconstructed Execution
 
 ---
 
@@ -333,15 +333,79 @@ Outputs:
 
 ---
 
+# Deterministic Replay Capability
+
+## Objective
+
+Allow reviewers to reconstruct outputs without rerunning workflows.
+
+---
+
+## Evidence Ledger
+
+Stores:
+
+* Request Snapshot
+* Extraction Snapshot
+* Validation Snapshot
+* Confidence Snapshot
+* Evidence Snapshot
+* Response Snapshot
+
+Location:
+
+```text
+ledger/
+```
+
+---
+
+## Replay Service
+
+Input:
+
+```text
+trace_id
+```
+
+Output:
+
+```json
+{
+    "request": {},
+    "extraction": {},
+    "validation": {},
+    "confidence": {},
+    "evidence": {},
+    "output": {}
+}
+```
+
+---
+
+## Replay API
+
+Endpoint:
+
+```http
+GET /replay/{trace_id}
+```
+
+Purpose:
+
+Reconstruct historical decisions.
+
+---
+
 # Failure Cases
 
 ## OCR Failure
 
 Examples:
 
-* Blurred Images
+* Blurry Images
+* Cropped Documents
 * Low Resolution
-* Partial Documents
 
 Mitigation:
 
@@ -355,13 +419,27 @@ Mitigation:
 
 Examples:
 
-* Incorrect User Data
+* User Data Mismatch
 * Identifier Mismatch
 
 Mitigation:
 
 * Fuzzy Matching
 * Normalization
+
+---
+
+## Replay Failure
+
+Examples:
+
+* Missing Ledger Artifact
+* Invalid Trace ID
+
+Mitigation:
+
+* Replay Error Handling
+* Trace Validation
 
 ---
 
@@ -376,21 +454,6 @@ Mitigation:
 
 * Similarity Search
 * Context Retrieval
-
----
-
-## LLM Failure
-
-Examples:
-
-* Hallucination
-* Missing OCR Context
-
-Mitigation:
-
-* Regex Recovery
-* Evidence Layer
-* Confidence Layer
 
 ---
 
@@ -410,7 +473,7 @@ Mitigation:
 
 # Provenance Model
 
-Implemented Fields:
+Implemented Fields
 
 * trace_id
 * request_id
@@ -423,7 +486,55 @@ Implemented Fields:
 
 Purpose:
 
-Enable reconstruction and replay of outputs.
+Support traceability and reconstruction.
+
+---
+
+# Evaluation Framework
+
+Dataset:
+
+```text
+evaluation/dataset.json
+```
+
+Metrics:
+
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+* False Positive Rate
+* False Negative Rate
+
+Generated Through:
+
+```text
+evaluation/run_evaluation.py
+```
+
+No manual metric reporting is used.
+
+---
+
+# Testing Evidence
+
+Coverage Includes:
+
+* Validation
+* Confidence
+* OCR Recovery
+* Replay
+* Replay Determinism
+* Evidence Ledger
+* Metrics
+* Health
+* Identity Pipeline
+* RAG
+
+Result:
+
+All tests passing.
 
 ---
 
@@ -432,12 +543,11 @@ Enable reconstruction and replay of outputs.
 Verified:
 
 * Application Startup
-* Swagger UI
 * Verification Endpoint
+* Replay Endpoint
 * Health Endpoint
 * Metrics Endpoint
-* RAG Upload
-* RAG Question Answering
+* RAG Endpoint
 
 Evidence Location:
 
@@ -447,59 +557,11 @@ review_packets/screenshots/
 
 ---
 
-# Evaluation Evidence
-
-Extraction Accuracy:
-
-85%
-
-Validation Accuracy:
-
-90%
-
-False Positive Rate:
-
-5%
-
-False Negative Rate:
-
-5%
-
-Evaluation Artifacts:
-
-* accuracy_report.md
-* validation_accuracy_report.md
-* evaluation_framework.md
-* accuracy_validation_packet.md
-
----
-
-# Testing Evidence
-
-Coverage Includes:
-
-* OCR Recovery
-* PAN Extraction
-* Aadhaar Extraction
-* Validation
-* Confidence
-* Metrics
-* Health
-* Traceability
-* Identity Pipeline
-* RAG
-
-Result:
-
-10+ Automated Tests Passing
-
----
-
 # Ecosystem Position
 
 Capability Type:
 
-Reusable Intelligence Capability
+Reusable Verifiable Intelligence Capability
 
 Potential Consumers:
 
@@ -519,15 +581,32 @@ Owned:
 * Validation
 * Confidence
 * Evidence
+* Replay
 * Observability
 
 Not Owned:
 
 * Governance
-* Authorization
 * Policy Decisions
+* User Authorization
 * Legal Determinations
 * Truth Ownership
+
+---
+
+# Acceptance Criteria Status
+
+| Requirement               | Status |
+| ------------------------- | ------ |
+| Replay Engine             | PASS   |
+| Evidence Ledger           | PASS   |
+| Replay API                | PASS   |
+| Confidence Explainability | PASS   |
+| Deterministic Replay      | PASS   |
+| Evaluation Framework      | PASS   |
+| Reproducible Metrics      | PASS   |
+| Provenance                | PASS   |
+| Testing                   | PASS   |
 
 ---
 
@@ -537,34 +616,32 @@ Repository Continuity Maintained: YES
 
 Deployment Proven: YES
 
-Accuracy Measured: YES
-
-Validation Measured: YES
-
-Observability Implemented: YES
+Traceability Implemented: YES
 
 Provenance Implemented: YES
 
-Authority Boundaries Defined: YES
+Deterministic Replay Implemented: YES
 
-Ecosystem Readiness Achieved: YES
+Confidence Explainability Implemented: YES
+
+Evaluation Reproducibility Achieved: YES
 
 Capability Convergence Achieved: YES
+
+Verifiable Intelligence Capability Achieved: YES
 
 ---
 
 # Reviewer Guidance
 
-To review the capability:
+1. Start application
+2. Execute verification workflow
+3. Capture trace_id
+4. Open Replay API
+5. Compare replay output with original output
+6. Execute evaluation framework
+7. Run pytest
+8. Verify metrics generation
+9. Verify evidence ledger
 
-1. Read README.md
-2. Review repository_lineage.md
-3. Review deployment_proof.md
-4. Review evaluation_framework.md
-5. Review capability_authority_matrix.md
-6. Execute pytest
-7. Verify health and metrics endpoints
-8. Execute verification workflow
-9. Execute RAG workflow
-
-The repository contains sufficient evidence to reconstruct, validate, deploy, and reuse the capability.
+The repository contains sufficient artifacts to reconstruct, validate, replay, evaluate, and audit platform decisions without re-running workflow execution.
