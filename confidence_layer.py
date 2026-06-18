@@ -113,6 +113,30 @@ class ConfidenceLayer:
             "level":
                 level,
 
-            "reasons":
-                reasons
+            "reasoning":
+                reasons,
+
+            "weights": {
+
+                "name":
+                    0.35,
+
+                "dob":
+                    0.20,
+
+                "aadhaar":
+                    0.25,
+
+                "pan":
+                    0.15,
+
+                "phone":
+                    0.05,
+
+                "completeness":
+                    round(
+                        completeness * 0.10,
+                        2
+                    )
+            }
         }
