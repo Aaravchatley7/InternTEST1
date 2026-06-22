@@ -53,6 +53,9 @@ from services.evidence_ledger import (
 from services.replay_service import (
     ReplayService
 )
+from capabilities.document_registry import (
+    DocumentRegistry
+)
 load_dotenv()
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
@@ -482,4 +485,15 @@ def replay_trace(
     return (
         ReplayService
         .replay(trace_id)
+    )
+
+@app.get(
+    "/capabilities/documents"
+)
+def supported_documents():
+
+    return (
+
+        DocumentRegistry
+        .get_supported()
     )
