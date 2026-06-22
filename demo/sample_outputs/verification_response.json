@@ -1,0 +1,11 @@
+{
+    "status": "success",
+    "document_type": "aadhaar",
+    "confidence": {
+        "score": 0.95,
+        "level": "HIGH"
+    },
+    "validation": {
+        "overall_match": true
+    }
+}
