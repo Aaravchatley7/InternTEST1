@@ -2,19 +2,131 @@
 
 ## Overview
 
-The BHIV Multi-Input Intelligence Platform is a reusable intelligence, validation, and document understanding system developed as part of the BHIV engineering build cycle.
+The BHIV Multi-Input Intelligence Platform is a reusable intelligence capability designed for document verification, validation, confidence scoring, evidence generation, provenance tracking, observability, deterministic replay, and Retrieval-Augmented Generation (RAG).
 
-The platform combines identity verification, confidence scoring, evidence generation, observability, retrieval-augmented generation (RAG), and reusable validation capabilities into a single deployable architecture.
+The platform has evolved from a document verification system into a reusable BHIV ecosystem capability that can be integrated into future products and extended by new engineers with minimal onboarding.
 
-The system is designed to serve as a foundation for future BHIV products involving:
+---
 
-* Identity Documents
-* Certificates
-* Forms
-* Structured Records
-* Reports
-* Invoices
-* Knowledge Repositories
+# Core Capabilities
+
+## Identity Verification
+
+Supported Documents:
+
+- Aadhaar
+- PAN
+
+Framework Support:
+
+- Passport
+- Driving Licence
+- Voter ID
+- Educational Certificates
+- Invoices
+- Government Forms
+
+Features:
+
+- OCR Extraction
+- Identity Validation
+- Confidence Scoring
+- Evidence Generation
+- Replay Support
+
+---
+
+## Confidence Engine
+
+Generates:
+
+- Confidence Score
+- Confidence Level
+- Confidence Reasoning
+- Weight Attribution
+
+Example:
+
+```json
+{
+    "score": 0.95,
+    "level": "HIGH",
+    "reasoning": [
+        "Name matched",
+        "DOB matched",
+        "PAN matched"
+    ]
+}
+```
+
+---
+
+## Evidence Generation
+
+Produces evidence-backed validation outputs.
+
+Includes:
+
+- Validation Artifacts
+- Confidence Artifacts
+- Trace Metadata
+- Replay Artifacts
+
+---
+
+## Observability
+
+Provides:
+
+- Logging
+- Metrics
+- Health Monitoring
+- Trace IDs
+- Latency Tracking
+
+---
+
+## Provenance
+
+Tracks:
+
+- trace_id
+- request_id
+- schema_version
+- contract_version
+- evaluation_version
+- timestamp
+- origin_source
+- confidence_source
+
+---
+
+## Deterministic Replay
+
+Allows reconstruction of historical executions using trace IDs.
+
+Replay reconstructs:
+
+- Original Request
+- Extraction Output
+- Validation Output
+- Confidence Output
+- Evidence Output
+- Final Response
+
+without re-running OCR, extraction, validation, or confidence workflows.
+
+---
+
+## Retrieval-Augmented Generation (RAG)
+
+Supports:
+
+- PDF Upload
+- Document Chunking
+- Embeddings
+- Vector Search
+- Question Answering
 
 ---
 
@@ -24,227 +136,178 @@ The system is designed to serve as a foundation for future BHIV products involvi
 
 ```text
 User Input
-    │
-    ▼
+    ↓
 Input Layer
-    │
-    ▼
+    ↓
 Extraction Layer
-(OCR + Regex Recovery + LLM)
-    │
-    ▼
+    ↓
 Validation Layer
-    │
-    ▼
+    ↓
 Confidence Layer
-    │
-    ▼
+    ↓
 Evidence Layer
-    │
-    ▼
+    ↓
 Observability Layer
-    │
-    ▼
-Trusted Output
+    ↓
+Provenance Layer
+    ↓
+Evidence Ledger
+    ↓
+Replay Engine
 ```
 
 ---
 
-## Identity Verification Pipeline
+## Verification Flow
 
 ```text
 User Form
 +
-Document Upload
+Document
 
-        │
-        ▼
+    ↓
 
 OCR Extraction
-(EasyOCR + Tesseract)
 
-        │
-        ▼
+    ↓
 
-Regex Recovery Layer
-(Aadhaar / PAN / DOB)
+Field Extraction
 
-        │
-        ▼
+    ↓
 
-LLM Extraction Layer
-(OpenRouter)
+Validation
 
-        │
-        ▼
+    ↓
 
-Field Fusion Engine
+Confidence
 
-        │
-        ▼
+    ↓
 
-Validation Layer
+Evidence
 
-        │
-        ▼
+    ↓
 
-Confidence Layer
+Ledger Storage
 
-        │
-        ▼
+    ↓
 
-Evidence Layer
-
-        │
-        ▼
-
-Verification Output
+Response
 ```
 
 ---
 
-## RAG Pipeline
+## Replay Flow
+
+```text
+Trace ID
+
+    ↓
+
+Replay API
+
+    ↓
+
+Replay Service
+
+    ↓
+
+Evidence Ledger
+
+    ↓
+
+Stored Artifacts
+
+    ↓
+
+Reconstructed Execution
+```
+
+---
+
+## RAG Flow
 
 ```text
 PDF Upload
 
-    │
-
-    ▼
-
-Document Loader
-
-    │
-
-    ▼
+    ↓
 
 Chunking
 
-    │
-
-    ▼
+    ↓
 
 Embeddings
 
-    │
+    ↓
 
-    ▼
+FAISS
 
-FAISS Vector Store
+    ↓
 
-    │
+Retrieval
 
-    ▼
-
-Question
-
-    │
-
-    ▼
-
-Similarity Search
-
-    │
-
-    ▼
-
-Context Retrieval
-
-    │
-
-    ▼
+    ↓
 
 OpenRouter LLM
 
-    │
+    ↓
 
-    ▼
-
-Answer + Confidence
+Answer
 ```
 
 ---
 
-## Multi-Input Foundation
+# Capability SDK
 
-The platform now includes a reusable capability registry to support future expansion.
+The platform exposes reusable SDK interfaces.
 
-Supported Input Types:
+## Verification SDK
 
-* Documents
-* Images
-* Forms
-* Structured JSON
+```python
+from sdk.verification_sdk import VerificationSDK
 
-Future BHIV systems can reuse the same validation and confidence framework without architectural changes.
+sdk = VerificationSDK()
 
----
-
-# Major Features
-
-## Identity Verification
-
-* Aadhaar Verification
-* PAN Verification
-* OCR Extraction
-* Regex-Based Recovery
-* LLM-Based Extraction
-* Validation Scoring
-* Confidence Scoring
-* Evidence Generation
-* Trace IDs
+result = sdk.verify(
+    form_data,
+    document_path,
+    document_type
+)
+```
 
 ---
 
-## Validation Hardening
+## RAG SDK
 
-Implemented:
+```python
+from sdk.rag_sdk import RAGSDK
 
-* Fuzzy Name Matching
-* Aadhaar Normalization
-* PAN Normalization
-* DOB Normalization
-* Phone Normalization
-* Typo Tolerance
-* Confidence Weighting
+rag = RAGSDK()
 
----
-
-## Accuracy Recovery
-
-Implemented:
-
-* OCR Preprocessing
-* EasyOCR Support
-* Tesseract Fallback
-* Aadhaar Regex Recovery
-* PAN Regex Recovery
-* DOB Recovery
-* Field Fusion Logic
+answer = rag.ask(
+    question
+)
+```
 
 ---
 
-## Knowledge Assistant (RAG)
+# Capability Registry
 
-* PDF Upload
-* Automatic Vectorization
-* FAISS Storage
-* Similarity Search
-* Context Retrieval
-* Question Answering
-* Confidence Output
+Document capabilities are managed through:
 
----
+```text
+capabilities/document_registry.py
+```
 
-## Observability
+Supported:
 
-* Health Endpoint
-* Metrics Endpoint
-* Request Tracking
-* Error Tracking
-* Latency Monitoring
-* Logging
-* Trace IDs
+- Aadhaar
+- PAN
+- Passport
+- Driving Licence
+- Voter ID
+- Certificate
+- Invoice
+- Government Form
 
 ---
 
@@ -255,109 +318,326 @@ BHIV_Project/
 
 ├── app.py
 
-├── capabilities/
-│   ├── input_registry.py
-│   ├── input_contract_v1.json
-│   └── validation_contract_v2.json
+├── sdk/
 
-├── contracts/
-│   ├── identity_contract_v1.json
-│   ├── validation_contract_v1.json
-│   ├── confidence_contract_v1.json
-│   └── evidence_contract_v1.json
+├── capabilities/
 
 ├── layers/
-│   ├── input_layer.py
-│   ├── extraction_layer.py
-│   ├── validation_layer.py
-│   ├── confidence_layer.py
-│   ├── evidence_layer.py
-│   ├── rag_layer.py
-│   └── observability_layer.py
 
 ├── services/
-│   ├── ocr_service.py
-│   ├── llm_service.py
-│   ├── comparison_service.py
-│   ├── rag_service.py
-│   ├── vector_service.py
-│   └── vector_builder.py
 
-├── reports/
-│   ├── accuracy_report.md
-│   ├── validation_accuracy_report.md
-│   └── deployment_report.md
+├── contracts/
+
+├── evaluation/
+
+├── benchmarking/
+
+├── learning_kit/
+
+├── demo/
+
+├── integration/
 
 ├── tests/
 
-├── review_packets/
+├── ledger/
+
+├── metrics/
+
+├── logs/
 
 ├── uploads/
 
 ├── vectorstore/
 
-└── README.md
+├── templates/
+
+├── static/
+
+└── review_packets/
 ```
 
 ---
 
 # Technologies Used
 
-Backend:
+## Backend
 
-* FastAPI
-* Python
+- FastAPI
+- Python
 
-OCR:
+## OCR
 
-* EasyOCR
-* Tesseract OCR
+- EasyOCR
+- Tesseract
 
-LLM:
+## LLM
 
-* OpenRouter
-* GPT OSS
+- OpenRouter
+- GPT OSS
 
-Vector Database:
+## Vector Database
 
-* FAISS
+- FAISS
 
-RAG Framework:
+## RAG
 
-* LangChain
+- LangChain
 
-Frontend:
+## Frontend
 
-* HTML
-* CSS
-* JavaScript
-* Jinja2
+- HTML
+- CSS
+- JavaScript
+- Jinja2
 
-Testing:
+## Testing
 
-* Pytest
+- Pytest
+
+---
+
+# Installation
+
+## Clone Repository
+
+```bash
+git clone <repository-url>
+```
+
+---
+
+## Create Virtual Environment
+
+Windows
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+Linux / Mac
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+---
+
+## Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Configure Environment
+
+Create:
+
+```text
+.env
+```
+
+Add:
+
+```env
+OPENROUTER_API_KEY=your_api_key
+```
+
+---
+
+# Running The Platform
+
+```bash
+uvicorn app:app --reload
+```
+
+Application:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# API Endpoints
+
+## Verification
+
+```http
+POST /documents/verify
+```
+
+---
+
+## Replay
+
+```http
+GET /replay/{trace_id}
+```
+
+---
+
+## Health
+
+```http
+GET /health
+```
+
+---
+
+## Metrics
+
+```http
+GET /metrics
+```
+
+---
+
+## RAG Upload
+
+```http
+POST /rag/upload
+```
+
+---
+
+## RAG Question
+
+```http
+POST /rag/ask
+```
+
+---
+
+## Supported Documents
+
+```http
+GET /capabilities/documents
+```
+
+---
+
+# Deterministic Replay
+
+Replay allows reconstruction of historical executions.
+
+Example:
+
+```http
+GET /replay/{trace_id}
+```
+
+Returns:
+
+```json
+{
+    "request": {},
+    "extraction": {},
+    "validation": {},
+    "confidence": {},
+    "evidence": {},
+    "output": {}
+}
+```
+
+---
+
+# Benchmarking
+
+Location:
+
+```text
+benchmarking/
+```
+
+Metrics:
+
+- Accuracy
+- Precision
+- Recall
+- F1 Score
+- False Positive Rate
+- False Negative Rate
+
+Generated Through:
+
+```text
+evaluation/run_evaluation.py
+```
+
+---
+
+# Learning Kit
+
+Location:
+
+```text
+learning_kit/
+```
+
+Includes:
+
+- Architecture Guide
+- Beginner Guide
+- Learning Roadmap
+- Troubleshooting Guide
+- Module Tutorials
+- Hands-On Exercises
+
+Purpose:
+
+Enable self-paced onboarding.
+
+---
+
+# Demonstration Suite
+
+Location:
+
+```text
+demo/
+```
+
+Includes:
+
+- Sample Requests
+- Sample Outputs
+- Walkthroughs
+- Verification Examples
+- Replay Examples
+- RAG Examples
+
+---
+
+# Ecosystem Integration
+
+Integration Guides Provided For:
+
+- UniGuru
+- Parikshak
+- Government Verification Systems
+- Knowledge Platforms
+- Document Intelligence Systems
+
+Location:
+
+```text
+integration/
+```
 
 ---
 
 # Testing
-
-Current Test Coverage Includes:
-
-* OCR Extraction
-* Aadhaar Recovery
-* PAN Recovery
-* Validation Logic
-* Confidence Scoring
-* Identity Pipeline
-* Health Checks
-* Metrics Validation
-* Observability
-* Trace ID Generation
-* RAG Functionality
-
-Target Achieved:
-
-10+ Automated Tests
 
 Run:
 
@@ -365,72 +645,65 @@ Run:
 pytest
 ```
 
+Coverage Includes:
+
+- Validation
+- OCR Recovery
+- Confidence
+- Replay
+- Replay Determinism
+- Evidence Ledger
+- Metrics
+- Health
+- RAG
+- SDK
+
 ---
 
-# Reports
+# Deployment Evidence
 
-Generated Reports:
+Deployment validation includes:
 
-* accuracy_report.md
-* validation_accuracy_report.md
-* deployment_report.md
-* REVIEW_PACKET.md
+- Application Startup
+- Health Endpoint
+- Metrics Endpoint
+- Verification Endpoint
+- Replay Endpoint
+- RAG Endpoint
+
+Evidence available in:
+
+```text
+review_packets/screenshots/
+```
 
 ---
 
-# Deliverables Implemented
+# Design Principles
 
-## Phase 1 – Accuracy Recovery
+The platform is built around:
 
-* OCR Improvements
-* Aadhaar Recovery
-* PAN Recovery
-* Extraction Fallback Logic
-* Accuracy Reporting
-
-## Phase 2 – Validation Hardening
-
-* Fuzzy Matching
-* Normalization
-* Confidence Weighting
-
-## Phase 3 – Multi-Input Foundation
-
-* Capability Registry
-* Input Contracts
-* Validation Contract V2
-
-## Phase 4 – Testing
-
-* Expanded Test Coverage
-* Identity Pipeline Testing
-* Health Testing
-* Metrics Testing
-
-## Phase 5 – Deployment
-
-* FastAPI Deployment
-* Deployment Evidence
-* Endpoint Validation
-
-## Phase 6 – Documentation
-
-* README
-* REVIEW_PACKET
-* Accuracy Report
-* Validation Report
-* Deployment Report
+- Reusability
+- Explainability
+- Traceability
+- Replayability
+- Observability
+- Extensibility
+- Ecosystem Integration
 
 ---
 
 # Future Enhancements
 
-* Passport Verification
-* Invoice Verification
-* Certificate Verification
-* OpenTelemetry Integration
-* Cloud Deployment
-* Continuous Evaluation Pipelines
+Potential future work:
+
+- Additional Document Types
+- OCR Provider Expansion
+- Confidence Calibration
+- Cloud Deployment
+- Distributed Tracing
+- Advanced Benchmarking
+- ML-Based Document Classification
 
 ---
 
@@ -438,5 +711,8 @@ Generated Reports:
 
 Aarav Chatley
 
+Applied AI Engineering
+
 BHIV Multi-Input Intelligence Platform
-Task 1 → Task 4 Repository Continuation
+
+Version 1.0.0
