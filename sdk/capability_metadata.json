@@ -1,0 +1,32 @@
+{
+    "name":
+        "BHIV Multi-Input Intelligence Platform",
+
+    "version":
+        "1.0.0",
+
+    "capability_type":
+        "Reusable Intelligence Capability",
+
+    "owner":
+        "BHIV Engineering",
+
+    "features": [
+
+        "verification",
+
+        "validation",
+
+        "confidence",
+
+        "evidence",
+
+        "observability",
+
+        "provenance",
+
+        "replay",
+
+        "rag"
+    ]
+}
